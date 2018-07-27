@@ -5,11 +5,11 @@ import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 
 export default {
-  entry: 'src/index.js',
+  entry: 'index.js',
   output: {
-    file: path.resolve(__dirname, '..', 'dist', `sixachord-${projInfo.version}.min.js`),
+    file: path.resolve(__dirname, '..', 'dist', `chorder-${projInfo.version}.min.js`),
     format: 'iife',
-    name: 'SixaChord'
+    name: 'Chorder'
   },
   plugins: [
     resolve(),

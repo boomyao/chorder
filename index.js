@@ -1,6 +1,6 @@
-import SixaChord from './src/sixachord';
+import Chorder from './src/chorder';
 import * as Chord from './src/chord';
 
-SixaChord.Chord = Chord;
+Chorder.Chord = Chord;
 
-export default SixaChord;
+export default Chorder;

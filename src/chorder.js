@@ -6,7 +6,7 @@
 
 import {getChord} from './chord';
 
-function SixaChord (context, x, y, width, height) {
+function Chorder (context, x, y, width, height) {
   this.context = context;
   this.x = x;
   this.y = y;
@@ -42,13 +42,13 @@ function SixaChord (context, x, y, width, height) {
   this.bars = [];
 }
 
-SixaChord.prototype.setNumFrets = function (num_frets) {
+Chorder.prototype.setNumFrets = function (num_frets) {
   this.num_frets = num_frets;
   this.fret_spacing = (this.height) / (this.num_frets + 1);
   return this;
 }
 
-SixaChord.prototype.setChord = function (chord, position, bars, position_text, tuning) {
+Chorder.prototype.setChord = function (chord, position, bars, position_text, tuning) {
   this.chord = chord;
   this.position = position || 0;
   this.position_text = position_text || 0;
@@ -59,12 +59,12 @@ SixaChord.prototype.setChord = function (chord, position, bars, position_text, t
   return this;
 }
 
-SixaChord.prototype.setPositionText = function (position) {
+Chorder.prototype.setPositionText = function (position) {
   this.position_text = position;
   return this;
 }
 
-SixaChord.prototype.draw = function () {
+Chorder.prototype.draw = function () {
   var spacing = this.spacing;
   var fret_spacing = this.fret_spacing;
 
@@ -120,7 +120,7 @@ SixaChord.prototype.draw = function () {
   }
 }
 
-SixaChord.prototype.lightUp = function (string_num, fret_num) {
+Chorder.prototype.lightUp = function (string_num, fret_num) {
   string_num = this.num_strings - string_num;
 
   var shift_position = 0;
@@ -153,7 +153,7 @@ SixaChord.prototype.lightUp = function (string_num, fret_num) {
   return this;
 }
 
-SixaChord.prototype.lightBar = function (string_from, string_to, fret_num) {
+Chorder.prototype.lightBar = function (string_from, string_to, fret_num) {
   if (this.position == 1 && this.position_text == 1) {
     fret_num -= this.position_text;
   }
@@ -173,7 +173,7 @@ SixaChord.prototype.lightBar = function (string_from, string_to, fret_num) {
   return this;
 }
 
-SixaChord.prototype.drawChord = function (chord_name) {
+Chorder.prototype.drawChord = function (chord_name) {
   const chord_data = getChord(chord_name);
   if (!chord_data) throw `chord dictionary have not chord name ${chord_name}.`;
   this.setChord(chord_data.chord, chord_data.position, chord_data.bars, this.tuning);
@@ -181,7 +181,7 @@ SixaChord.prototype.drawChord = function (chord_name) {
   this.drawName(chord_name);
 }
 
-SixaChord.prototype.drawName = function (chord_name) {
+Chorder.prototype.drawName = function (chord_name) {
   drawText(this.context, chord_name, 
     this.x + this.width/2 - this.metrics.chord_name_font_size * chord_name.length / 2,
     this.y - this.fret_spacing - this.metrics.chord_name_bottom_padding, 
@@ -224,4 +224,4 @@ function drawRect(context, x, y, w, h, style = {}) {
   context.fill();
 }
 
-export default SixaChord;
+export default Chorder;
