@@ -1,0 +1,31 @@
+{
+  "name": "chorder",
+  "version": "1.0.0",
+  "description": "guitar chord renderer",
+  "main": "index.js",
+  "scripts": {
+    "build": "NODE_ENV=production rollup --config ./scripts/rollup.config.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boomyao/chorder.git"
+  },
+  "keywords": [
+    "chord",
+    "guitar"
+  ],
+  "author": "boomyao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boomyao/chorder/issues"
+  },
+  "homepage": "https://github.com/boomyao/chorder#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "rollup": "^0.63.4",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-uglify": "^4.0.0"
+  }
+}
