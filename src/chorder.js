@@ -176,7 +176,7 @@ Chorder.prototype.lightBar = function (string_from, string_to, fret_num) {
 Chorder.prototype.drawChord = function (chord_name) {
   const chord_data = getChord(chord_name);
   if (!chord_data) throw `chord dictionary have not chord name ${chord_name}.`;
-  this.setChord(chord_data.chord, chord_data.position, chord_data.bars, this.tuning);
+  this.setChord(chord_data.chord, chord_data.position, chord_data.bars, chord_data.position, this.tuning);
   this.draw();
   this.drawName(chord_name);
 }
