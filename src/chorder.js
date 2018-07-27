@@ -226,8 +226,7 @@ function drawArc(context, x, y,r) {
 function drawRect(context, x, y, w, h, style = {}) {
   context.fillStyle = style. fill || '#444';
   context.beginPath();
-  context.rect(x, y, w, h);
-  context.fill();
+  context.fillRect(x, y, w, h);
 }
 
 export default Chorder;
