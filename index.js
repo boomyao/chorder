@@ -1,6 +1,8 @@
 import Chorder from './src/chorder';
-import * as Chord from './src/chord';
-
-Chorder.Chord = Chord;
+import {getChord} from './src/chord';
 
 export default Chorder;
+
+export const Chord = {
+  getChord
+}

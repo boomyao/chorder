@@ -40,6 +40,13 @@ function Chorder (context, x, y, width, height) {
   this.position_text = 0;
   this.chord = [];
   this.bars = [];
+
+  if (this.context && !this.context.setFont) {
+    this.cotnext.setFont = function(family, size, weight) {
+      this.vexFlowCanvasContext.font = (weight || '') + ' ' + size + 'pt' + family;
+      return this;
+    }
+  }
 }
 
 Chorder.prototype.setNumFrets = function (num_frets) {
@@ -48,10 +55,9 @@ Chorder.prototype.setNumFrets = function (num_frets) {
   return this;
 }
 
-Chorder.prototype.setChord = function (chord, position, bars, position_text, tuning) {
+Chorder.prototype.setChord = function (chord, position, bars, tuning) {
   this.chord = chord;
   this.position = position || 0;
-  this.position_text = position_text || 0;
   this.bars = bars || [];
   this.tuning = tuning || ["E", "A", "D", "G", "B", "E"];
   if (tuning == [])
@@ -176,7 +182,7 @@ Chorder.prototype.lightBar = function (string_from, string_to, fret_num) {
 Chorder.prototype.drawChord = function (chord_name) {
   const chord_data = getChord(chord_name);
   if (!chord_data) throw `chord dictionary have not chord name ${chord_name}.`;
-  this.setChord(chord_data.chord, chord_data.position, chord_data.bars, chord_data.position, this.tuning);
+  this.setChord(chord_data.chord, chord_data.position, chord_data.bars, this.tuning);
   this.draw();
   this.drawName(chord_name);
 }
@@ -200,7 +206,7 @@ function drawText(context, text, x, y, fontStyle = {}) {
   const fontSize = fontStyle.fontSize || 10;
   const fontWeight = fontStyle.fontWeight || 'normal';
   const family = fontStyle.family || 'sans-serif';
-  context.font = `${fontWeight} ${fontSize}px ${family}`;
+  context.setFont(family, fontSize, fontWeight);
   context.fillText(text, x, y);
 }
 

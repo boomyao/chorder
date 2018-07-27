@@ -1,6 +1,6 @@
 {
   "name": "chorder",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "guitar chord renderer",
   "main": "index.js",
   "scripts": {
