@@ -20,7 +20,7 @@ function Chorder (context, x, y, width, height) {
   this.fret_spacing = (this.height) / (this.num_frets + 2);
 
   this.metrics = {
-    circle_radius: this.width / 24,
+    circle_radius: (this.width / 19),
     text_shift_x: this.width / 29,
     text_shift_y: this.height / 29,
     font_size: Math.ceil(this.width / 9),
@@ -42,8 +42,8 @@ function Chorder (context, x, y, width, height) {
   this.bars = [];
 
   if (this.context && !this.context.setFont) {
-    this.cotnext.setFont = function(family, size, weight) {
-      this.vexFlowCanvasContext.font = (weight || '') + ' ' + size + 'pt' + family;
+    this.context.setFont = (family, size, weight) => {
+      this.context.font = `${weight || ''} ${size}pt ${family}`;
       return this;
     }
   }
