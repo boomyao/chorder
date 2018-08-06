@@ -139,16 +139,17 @@ const CHORD_DIC = {
 
 const KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'G', 'G#', 'A', 'A#', 'B'];
 
-export function getChord(name) {
-  const type = getType(name);
-  const str = findRoot();
-}
+// export function getChord(name) {
+//   const type = getType(name);
+//   const str = findRoot();
+// }
 
 function parseName(name) {
   const keys = [];
   const rootMatch = name.match(/^#?`[A-G]/);
   if (!rootMatch) return keys;
-  const root = rootMatch[0];
+  let root = rootMatch[0];
+  root = root.split('').reverse().join();
   const ridx = KEYS.indexOf(root);
   const left = name.substr(root.length);
   if (!left) { // 大三和弦
@@ -159,23 +160,28 @@ function parseName(name) {
     keys.push(...[ridx, ridx + 4 % 11, ridx + 4 % 11]); 
   } else if (/^(dim){1}/.test(left)) { // 减和弦
     keys.push(...[ridx, ridx + 3 % 11, ridx + 6 % 11]);
-  } else if (/^\d+$/.test(left)) { // n和弦
-    const n = left.match(/^\d+$/g)[0];
-    if (n === 6) {
-      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 9 % 11]);
-    } else if (n === 7) {
-      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 10 % 11]);
-    } else if (n === 9) {
-      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 10 % 11, ridx + 13 % 11]);
-    } else if (n === 11) {
-      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 10 % 11, ridx + 17 % 11]);
-    } else if (n === 13) {  
-      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 10 % 11, ridx + 20 % 11]);
-    }
   }
 
   if (/^\d/.test(left) || /(m|g|j|M)\d/.test(left)) {
-
+    const n = Number(left.match(/^\d+$/g)[0]);
+    if (n === 6) {
+      keys[3] = (ridx + 8) % 11;
+    } else if (n >= 7) {
+      const majAdd = /(j|M)\d/.test(left) ? 1 : 0;
+      keys[3] = (ridx + 8) % 11 + majAdd;
+      if (n === 9) {
+        keys[4] = (ridx + 12) % 11;
+      } else if (n === 11) {
+        keys[4] = (ridx + 16) % 11;
+      } else if (n === 13) {
+        keys[4] = (ridx + 19) % 11;
+      }
+    }
+  } else if (/^add\d/.test(left)) {
+    const n = Number(left.match(/^\d+$/g)[0]);
+    if (n > 8) {
+      keys[3] = ridx + (n%7-1);
+    }
   }
 
   if (/sus(2|4)/.test(left) && keys.length >= 3) { // sus
@@ -189,3 +195,29 @@ function parseName(name) {
   }
   return keys;
 }
+
+function calSemitone(key, octave) {
+  const fullTime = parseInt(octave / 8);
+  const part = octave % 8;
+  let total = fullTime * 12;
+  if (key < 4) {
+    if (part + key < 5) {
+      total += 2 * (part - 1);
+    } else if (part + key >= 5 && part + key <=8 ) {
+      total += 2 * (part - 1) -1;
+    } else {
+      total += 2 * (part - 1) - 2;
+    }
+  } else {
+    if (part + key <= 9) {
+      total += 2 * part;
+    } else if (part + key > 9 && part + key <= 11) {
+      total += 2*part -1;
+    } else {
+      total += 2*part - 2;
+    }
+  }
+  return total;
+}
+
+console.log(calSemitone(4, 7))
