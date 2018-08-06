@@ -137,6 +137,55 @@ const CHORD_DIC = {
   },
 }
 
+const KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'G', 'G#', 'A', 'A#', 'B'];
+
 export function getChord(name) {
-  return CHORD_DIC[name];
+  const type = getType(name);
+  const str = findRoot();
+}
+
+function parseName(name) {
+  const keys = [];
+  const rootMatch = name.match(/^#?`[A-G]/);
+  if (!rootMatch) return keys;
+  const root = rootMatch[0];
+  const ridx = KEYS.indexOf(root);
+  const left = name.substr(root.length);
+  if (!left) { // 大三和弦
+    keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11]);
+  } else if (/^m{1}/.test(left) && !/^maj/.test(left)) { 
+    keys.push(...[ridx, ridx + 3 % 11, ridx + 7 % 11]); // 小三和弦
+  } else if (/^(aug){1}/.test(left)) { // 增和弦
+    keys.push(...[ridx, ridx + 4 % 11, ridx + 4 % 11]); 
+  } else if (/^(dim){1}/.test(left)) { // 减和弦
+    keys.push(...[ridx, ridx + 3 % 11, ridx + 6 % 11]);
+  } else if (/^\d+$/.test(left)) { // n和弦
+    const n = left.match(/^\d+$/g)[0];
+    if (n === 6) {
+      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 9 % 11]);
+    } else if (n === 7) {
+      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 10 % 11]);
+    } else if (n === 9) {
+      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 10 % 11, ridx + 13 % 11]);
+    } else if (n === 11) {
+      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 10 % 11, ridx + 17 % 11]);
+    } else if (n === 13) {  
+      keys.push(...[ridx, ridx + 4 % 11, ridx + 7 % 11, ridx + 10 % 11, ridx + 20 % 11]);
+    }
+  }
+
+  if (/^\d/.test(left) || /(m|g|j|M)\d/.test(left)) {
+
+  }
+
+  if (/sus(2|4)/.test(left) && keys.length >= 3) { // sus
+    const n = left.match(/sub(2|4)/g)[0][3];
+    if (n === '2') keys[1] -= 2;
+    if (n === '4') keys[1] += 1;
+  }
+  if (/-\d$/.test(left)) {
+    const n = left.match(/-\d$/g)[0].substr(1);
+    if (keys[Number(n)]) keys[Number(n)]--;
+  }
+  return keys;
 }
