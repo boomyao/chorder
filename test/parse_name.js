@@ -1,4 +1,5 @@
 import {parseName} from '../src/chord';
+import {getKeyIdx} from '../src/utils';
 import assert from 'assert';
 
 describe('大三和弦测试', () => {
@@ -97,6 +98,45 @@ describe('n度和弦', () => {
   it('CmM7', () => {
     var expected = [0, 3, 7, 11].toString();
     var actual = parseName('CmM7').toString();
+    assert.equal(expected, actual);
+  })
+
+  it('Csus4', () => {
+    var expected = [0, 5, 7].toString();
+    var actual = parseName('Csus4').toString();
+    assert.equal(expected, actual);
+  })
+  it('Esus4', () => {
+    var expected = getKeyIdx('EAB').toString();
+    var actual = parseName('Esus4').toString();
+    assert.equal(expected, actual);
+  })
+  it('Esus2', () => {
+    var expected = getKeyIdx('EF#B').toString();
+    var actual = parseName('Esus2').toString();
+    assert.equal(expected, actual);
+  })
+
+  it('Cadd9', () => {
+    var expected = getKeyIdx('CEGD').toString();
+    var actual = parseName('Cadd9').toString();
+    assert.equal(expected, actual);
+  })
+
+  it('Eadd9', () => {
+    var expected = getKeyIdx('EG#BF#').toString();
+    var actual = parseName('Eadd9').toString();
+    assert.equal(expected, actual);
+  })
+
+  it('G/B', () => {
+    var expected = getKeyIdx('BDG').toString();
+    var actual = parseName('G/B').toString();
+    assert.equal(expected, actual);
+  })
+  it('C#/G#', () => {
+    var expected = getKeyIdx('BDG').toString();
+    var actual = parseName('G/B').toString();
     assert.equal(expected, actual);
   })
 })

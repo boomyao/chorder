@@ -1,11 +1,11 @@
 const KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 export function parseName(name) {
-  const keys = [];
-  const rootMatch = name.match(/^#?[A-G]/);
+  let keys = [];
+  let stand;
+  const rootMatch = name.match(/^[A-G]#?/);
   if (!rootMatch) return keys;
   let root = rootMatch[0];
-  root = root.split('').reverse().join('');
   const ridx = KEYS.indexOf(root);
   const left = name.substr(root.length);
   if (/^m{1}/.test(left) && !/^maj/.test(left)) {
@@ -31,18 +31,26 @@ export function parseName(name) {
         }
       }
     }
-  } else if (/^add\d/.test(left)) {
-    const n = Number(left.match(/^\d+$/g)[0]);
-    if (n > 8) {
-      keys[3] = ridx + (n % 7 - 1);
-    }
+  } else if (/add9/.test(left)) {
+    keys[3] = (ridx + calSemitone(1, 9)) % 12;
   }
 
   if (/sus(2|4)/.test(left) && keys.length >= 3) { // sus
-    const n = left.match(/sub(2|4)/g)[0][3];
+    const n = left.match(/sus(2|4)/g)[0][3];
     if (n === '2') keys[1] -= 2;
     if (n === '4') keys[1] += 1;
   }
+
+  if (stand = left.match(/\/[A-G]#?$/g)) {
+    if (stand) {
+      const keyName = stand[0].substr(1);
+      const key = KEYS.indexOf(keyName);
+      if (keys.slice(0, 2).indexOf(key) < 0) throw 'un correct transform key';
+      keys.unshift(key);
+      keys = orderChord(keys);
+    }
+  }
+
   if (/-\d$/.test(left)) {
     const n = left.match(/-\d$/g)[0].substr(1);
     if (keys[Number(n)]) keys[Number(n)]--;
@@ -74,4 +82,11 @@ export function calSemitone(key, octave) {
     }
   }
   return total;
+}
+
+export function orderChord(keys) {
+  const root = keys.shift();
+  const left = keys.filter(k => k < root).sort((a, b) => a>b);
+  const right = keys.filter(k => k > root).sort((a, b) => a>b);
+  return [root].concat(right).concat(left);
 }
